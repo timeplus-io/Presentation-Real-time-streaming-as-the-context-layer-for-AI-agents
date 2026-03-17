@@ -102,7 +102,7 @@ export const Deck: React.FC<DeckProps> = ({ children }) => {
             }}
             className="absolute top-0 left-0"
           >
-            <AnimatePresence initial={false} custom={direction}>
+            <AnimatePresence custom={direction}>
               <motion.div
                 key={currentSlide}
                 custom={direction}
