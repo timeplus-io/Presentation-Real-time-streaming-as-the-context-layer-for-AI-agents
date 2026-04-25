@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Deck } from './components/Deck';
 import { TimeplusLogo } from './components/TimeplusLogo';
 import { ContextInfographic } from './components/ContextInfographic';
-import { Clock, Zap, Timer, GitMerge, Database, Bell, AlertTriangle, TrendingDown, TrendingUp, BarChart3, Quote, Shield, Activity, Settings, Users, Truck, Lightbulb, Rocket, Bot, Layers, Server, Terminal, Code, BrainCog, List } from 'lucide-react';
+import { Clock, Zap, Timer, GitMerge, Database, Bell, AlertTriangle, TrendingDown, TrendingUp, BarChart3, Quote, Shield, Activity, Settings, Users, Truck, Lightbulb, Rocket, Bot, Layers, Server, Terminal, Code, BrainCog, List, RefreshCw, Search, Braces, Code2, Pencil, Type, Boxes, Radio, Tag } from 'lucide-react';
 import { KafkaIcon, FlinkIcon, GoogleIcon, PostgresIcon, LangGraphIcon } from './components/TechIcons';
 import { motion } from 'motion/react';
 
@@ -202,6 +202,48 @@ const XebiaArchitectureDiagram = () => {
   );
 };
 
+// Horizontal database-style cylinder used in the storage layer of the
+// Timeplus Reference Architecture slide. Light fill, Timeplus-pink stroke,
+// with a subtle pulsing glow to suggest active storage.
+const StorageCylinder: React.FC<{ children: React.ReactNode; pulseDelay?: number }> = ({ children, pulseDelay = 0 }) => (
+  <motion.div
+    className="relative w-full h-14 md:h-16"
+    animate={{
+      filter: [
+        'drop-shadow(0 0 0px rgba(213,63,140,0))',
+        'drop-shadow(0 0 8px rgba(213,63,140,0.65))',
+        'drop-shadow(0 0 0px rgba(213,63,140,0))',
+      ],
+    }}
+    transition={{ duration: 2, repeat: Infinity, delay: pulseDelay, ease: 'easeInOut' }}
+  >
+    <svg
+      viewBox="0 0 200 80"
+      className="absolute inset-0 w-full h-full"
+      preserveAspectRatio="none"
+    >
+      {/* Pill body — light fill, Timeplus pink outline */}
+      <path
+        d="M 16 4 L 184 4 A 12 36 0 0 1 184 76 L 16 76 A 12 36 0 0 1 16 4 Z"
+        fill="#ffffff"
+        stroke="#D53F8C"
+        strokeWidth="1.5"
+      />
+      {/* Inner depth arc giving the 3D cylinder/database look */}
+      <path
+        d="M 172 4 A 12 36 0 0 0 172 76"
+        stroke="#D53F8C"
+        strokeWidth="1"
+        fill="none"
+        opacity="0.55"
+      />
+    </svg>
+    <div className="absolute inset-0 flex items-center justify-center text-[11px] md:text-xs text-gray-800 text-center px-4 leading-tight font-semibold">
+      {children}
+    </div>
+  </motion.div>
+);
+
 // Slide indices (0-indexed) included in the simplified view.
 // Maps to current slides 1, 2, 3, 5, 7, 12, 13, 14.
 const SIMPLIFIED_INDICES = [0, 1, 2, 4, 6, 11, 12, 13];
@@ -226,9 +268,8 @@ const ModeToggle: React.FC<{ simplified: boolean; onChange: (v: boolean) => void
       onClick={() => onChange(true)}
       aria-label="Quick view"
       title="Quick view (8 slides)"
-      className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${
-        simplified ? 'bg-pink-500 text-white shadow' : 'text-gray-500 hover:text-gray-800'
-      }`}
+      className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${simplified ? 'bg-pink-500 text-white shadow' : 'text-gray-500 hover:text-gray-800'
+        }`}
     >
       <Zap className="w-4 h-4" />
     </button>
@@ -237,9 +278,8 @@ const ModeToggle: React.FC<{ simplified: boolean; onChange: (v: boolean) => void
       onClick={() => onChange(false)}
       aria-label="Detailed view"
       title="Detailed view (18 slides)"
-      className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${
-        !simplified ? 'bg-pink-500 text-white shadow' : 'text-gray-500 hover:text-gray-800'
-      }`}
+      className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${!simplified ? 'bg-pink-500 text-white shadow' : 'text-gray-500 hover:text-gray-800'
+        }`}
     >
       <List className="w-4 h-4" />
     </button>
@@ -916,32 +956,38 @@ export default function App() {
                 </p>
                 <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
                   {[
-                    { label: 'Incremental MV', planned: false },
-                    { label: 'Ad-hoc Query', planned: false },
-                    { label: 'UDAF JS', planned: false },
-                    { label: 'UDAF Python', planned: false },
-                    { label: 'Alert', planned: false },
-                    { label: 'AI Agentic', planned: true },
-                    { label: 'Append-only Stream', planned: false },
-                    { label: 'Mutable Stream', planned: false },
-                    { label: 'Inverted Index', planned: true },
-                    { label: 'Vector Index', planned: true },
-                    { label: 'Pub/Sub Stream', planned: true },
-                    { label: 'Meta Data', planned: true },
-                  ].map((item, i) => (
-                    <motion.div
-                      key={item.label}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.4 + i * 0.03 }}
-                      className={`bg-gray-800 rounded-lg py-2 px-1 text-center text-[11px] md:text-xs ${item.planned
-                        ? 'border border-dashed border-pink-500/60 text-pink-300'
-                        : 'border border-gray-600 text-gray-100'
-                        }`}
-                    >
-                      {item.label}
-                    </motion.div>
-                  ))}
+                    { icon: RefreshCw, label: 'Incremental MV', planned: false },
+                    { icon: Search, label: 'Ad-hoc Query', planned: false },
+                    { icon: Braces, label: 'UDAF JS', planned: false },
+                    { icon: Code2, label: 'UDAF Python', planned: false },
+                    { icon: Bell, label: 'Alert', planned: false },
+                    { icon: Bot, label: 'AI Agentic', planned: true },
+                    { icon: Activity, label: 'Append-only Stream', planned: false },
+                    { icon: Pencil, label: 'Mutable Stream', planned: false },
+                    { icon: Type, label: 'Inverted Index', planned: true },
+                    { icon: Boxes, label: 'Vector Index', planned: true },
+                    { icon: Radio, label: 'Pub/Sub Stream', planned: true },
+                    { icon: Tag, label: 'Meta Data', planned: true },
+                  ].map((item, i) => {
+                    const Icon = item.icon;
+                    return (
+                      <motion.div
+                        key={item.label}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.4 + i * 0.03 }}
+                        className={`bg-gray-800 rounded-lg py-2 px-1 flex flex-col items-center justify-center gap-1 text-[10px] md:text-xs leading-tight text-center ${item.planned
+                          ? 'border border-dashed border-pink-500/60 text-pink-500'
+                          : 'border border-gray-600 text-gray-100'
+                          }`}
+                      >
+                        <Icon
+                          className={`w-4 h-4 md:w-[18px] md:h-[18px] ${item.planned ? 'text-pink-400' : 'text-gray-300'}`}
+                        />
+                        <span>{item.label}</span>
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </motion.div>
             </div>
@@ -967,18 +1013,38 @@ export default function App() {
                   {[0, 1, 2].map((shard) => (
                     <motion.div
                       key={shard}
-                      className="flex gap-2"
+                      className="relative"
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.6 + shard * 0.1 }}
                     >
-                      <div className="flex-1 bg-gray-800 border border-gray-600 rounded-lg py-2 px-1 text-center">
-                        <div className="text-[11px] md:text-xs text-gray-100">Write Ahead Log</div>
-                        <div className="text-[10px] text-pink-400 mt-1">Latency-Optimized</div>
+                      <div className="flex gap-1 items-start">
+                        <div className="flex-1 flex flex-col items-center">
+                          <StorageCylinder pulseDelay={shard * 0.5}>
+                            <span className="text-[10px] text-pink-400 mt-1">Write<br />Ahead Log</span>
+                          </StorageCylinder>
+                          <div className="text-[10px] text-pink-400 mt-1">Latency-Optimized</div>
+                        </div>
+                        <div className="flex-1 flex flex-col items-center">
+                          <StorageCylinder pulseDelay={shard * 0.5 + 0.7}>
+                            <span className="text-[10px] text-pink-400 mt-1">Columnar/Row<br />Store</span>
+                          </StorageCylinder>
+                          <div className="text-[10px] text-pink-400 mt-1">Throughput-Optimized</div>
+                        </div>
                       </div>
-                      <div className="flex-1 bg-gray-800 border border-gray-600 rounded-lg py-2 px-1 text-center">
-                        <div className="text-[11px] md:text-xs text-gray-100">Columnar/Row Store</div>
-                        <div className="text-[10px] text-pink-400 mt-1">Throughput-Optimized</div>
+
+                      {/* Data flow packets traveling WAL → Store */}
+                      <div className="absolute left-3 right-3 top-7 md:top-8 -translate-y-1/2 pointer-events-none z-20 h-2">
+                        <motion.div
+                          className="w-1.5 h-1.5 bg-pink-600 rounded-full absolute top-1/2 -translate-y-1/2 shadow-[0_0_8px_rgba(213,63,140,1)]"
+                          animate={{ left: ['0%', '100%'] }}
+                          transition={{ duration: 2.4, repeat: Infinity, ease: 'linear', delay: shard * 0.4 }}
+                        />
+                        <motion.div
+                          className="w-1.5 h-1.5 bg-pink-600 rounded-full absolute top-1/2 -translate-y-1/2 shadow-[0_0_8px_rgba(213,63,140,1)]"
+                          animate={{ left: ['0%', '100%'] }}
+                          transition={{ duration: 2.4, repeat: Infinity, ease: 'linear', delay: shard * 0.4 + 1.2 }}
+                        />
                       </div>
                     </motion.div>
                   ))}
@@ -994,7 +1060,7 @@ export default function App() {
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="inline-block w-3 h-3 border border-dashed border-pink-500/60 bg-gray-800 rounded-sm"></span>
-                <span>On the roadmap</span>
+                <span>Under Active Development</span>
               </div>
             </div>
           </div>
