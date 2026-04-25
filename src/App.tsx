@@ -1155,7 +1155,7 @@ export default function App() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4 + i * 0.1 }}
-                      className={`rounded-xl p-3 md:p-3.5 flex items-center gap-3 flex-1 ${layer.highlight
+                      className={`relative rounded-xl p-3 md:p-3.5 flex items-center gap-3 flex-1 ${layer.highlight
                         ? 'bg-pink-500/10 border-2 border-pink-500 shadow-lg shadow-pink-500/20'
                         : 'bg-gray-800/60 border border-gray-700'
                         }`}
@@ -1172,6 +1172,9 @@ export default function App() {
                           {layer.desc}
                         </p>
                       </div>
+                      {layer.highlight && (
+                        <TimeplusLogo className="absolute top-2 right-3 h-4 md:h-5 w-auto opacity-90" />
+                      )}
                     </motion.div>
                   );
                 })}
